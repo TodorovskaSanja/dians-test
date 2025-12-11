@@ -1,0 +1,69 @@
+import { useEffect, useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
+
+export default function Crypto(props) {
+    const { id } = useParams();
+    const location = useLocation();
+    const [details, setDetails] = useState(location.state?.details || null);
+
+
+    useEffect(() => {
+        console.log(id)
+        if (!details) {
+            fetch(`https://localhost:8080/api/${id}`)
+                .then((response) => response.json())
+                .then((data) => {
+                    console.log(id)
+                    console.log(data)
+                    setDetails(data);
+                })
+                .catch((e) => console.log(e));
+        }
+    }, [id, details]);
+
+    return (
+
+        <>
+
+            <div className="flex flex-col gap-2 ms-2">
+                <div className="flex items-center">
+                    <div className="inline-block">
+                        <h2 className="font-bold md:text-xl m-3">Details for {details?.name}</h2>
+                        <img src={`${details?.image}`} className="min-w-[330px]"/>
+                    </div>
+
+                    <div className="inline-block ms-7">
+                        <h1 className="mt-4 mb-4 text-3xl font-bold tracking-tight text-heading md:text-3xl lg:text-5xl">{details?.name}</h1>
+
+                        <table className="text-body">
+                            <tr>
+                                <td className="font-bold min-w-[120px]">Current price:</td>
+                                <td>${details?.current_price}</td>
+                            </tr>
+                            <tr>
+                                <td className="font-bold min-w-[120px]">Market cap:</td>
+                                <td>{details?.market_cap}</td>
+                            </tr>
+                            <tr>
+                                <td className="font-bold min-w-[120px]">High:</td>
+                                <td>${details?.high_24h}</td>
+                            </tr>
+                            <tr>
+                                <td className="font-bold min-w-[120px]">Low:</td>
+                                <td>${details?.low_24h}</td>
+                            </tr>
+                            <tr>
+                                <td className="font-bold min-w-[120px]">Total volume:</td>
+                                <td>{details?.total_volume}</td>
+                            </tr>
+                            <tr>
+                                <td className="font-bold min-w-[120px]">Total supply:</td>
+                                <td>{details?.total_supply}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </>
+    );
+}
