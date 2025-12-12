@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
+import OhlcvChart from "../../components/OhlcvChart.js";
 
 export default function Crypto(props) {
     const { id } = useParams();
     const location = useLocation();
     const [details, setDetails] = useState(location.state?.details || null);
-
+    const [ohlcv, setOhlcv] = useState([]);
 
     useEffect(() => {
         console.log(id)
@@ -20,6 +21,18 @@ export default function Crypto(props) {
                 .catch((e) => console.log(e));
         }
     }, [id, details]);
+
+    useEffect(() => {
+        // https dava ERR_CONNECTION_RESET
+        fetch(`http://localhost:8080/api/${id}/ohlcv`)
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data)
+                setOhlcv(data);
+            })
+            .catch((e) => console.log(e));
+    }, [id]);
+
 
     return (
 
@@ -64,7 +77,14 @@ export default function Crypto(props) {
                     </div>
                 </div>
 
-                <div>Test</div>
+                <div className="mt-10 p-20">
+                    <h3 className="text-xl font-bold mb-4 text-center">OHLCV Chart (Last 3 Months)</h3>
+                    {ohlcv.length > 0 ? (
+                        <OhlcvChart data={ohlcv} />
+                    ) : (
+                        <p>Loading chart...</p>
+                    )}
+                </div>
             </div>
         </>
     );
