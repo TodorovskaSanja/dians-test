@@ -29,7 +29,7 @@ export default function Crypto(props) {
                 <div className="flex items-center">
                     <div className="inline-block">
                         <h2 className="font-bold md:text-xl m-3">Details for {details?.name}</h2>
-                        <img src={`${details?.image}`} className="min-w-[330px]"/>
+                        <img src={`${details?.image}`} className="min-w-[330px]" />
                     </div>
 
                     <div className="inline-block ms-7">
@@ -63,6 +63,8 @@ export default function Crypto(props) {
                         </table>
                     </div>
                 </div>
+
+                <div>Test</div>
             </div>
         </>
     );
